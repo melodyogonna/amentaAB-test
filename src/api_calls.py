@@ -15,7 +15,8 @@ class FortNoxRequestHandler():
     def get_all_articles(self):
         '''Return all articles'''
         r = requests.get(f'{api_url}articles', headers=self.headers)
-        return r.json()
+        decoded_response = r.json()
+        return decoded_response.get('Articles')
 
     def update_article(self, article):
         '''Update and article'''
@@ -31,7 +32,23 @@ class FortNoxRequestHandler():
 
     def get_customers(self, pages=None):
         '''Get a list of customers'''
-        r = requests.get(f'{api_url}customers/', headers=self.headers)
-        return r.json()
+        if pages is None:
+            r = requests.get(f'{api_url}customers/', headers=self.headers)
+            decoded_response = r.json()
+            return decoded_response.get('Customers')
+
+        customers = []
+        current_page = 1
+
+        while current_page <= pages:
+            r = requests.get(f'{api_url}customers/',
+                    params={'page':current_page}, headers=self.headers)
+            decoded_response = r.json()
+            customers = customers + decoded_response.get('Customers')
+            current_page += 1
+
+        return customers
+            
+
 
         

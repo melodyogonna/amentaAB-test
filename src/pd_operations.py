@@ -9,11 +9,12 @@ class DataHandler():
 
     def create_df(self, frame_object) -> pd.DataFrame:
         '''Create a data frame from a given frame object'''
-        return pd.DataFrame(frame_object)
+        return pd.DataFrame.from_records(frame_object)
     
     def filter_df(self, df:pd.DataFrame, fiter_function) -> pd.DataFrame:
         '''Run a filter function through the pandas data frame'''
-        return df.filter(fiter_function)
+        print(type(df.query(fiter_function())))
+        return df.query(fiter_function())
 
     def update_quantiy(self, df:pd.DataFrame) -> pd.DataFrame:
         '''Iterate through a dataframe and update the quantity'''
@@ -38,6 +39,11 @@ class DataHandler():
         for index, row in df.iterrows():
             row.update({'Email': 'testing555@hotmail.com'})
         return df
+
+    def save_to_excel(self, df, *args, **kwargs):
+        df.to_excel(*args, **kwargs)
+
+
 
 
             
